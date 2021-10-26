@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getTimefromUnix } from "./utils";
+import { getTimefromUnix, filterForecast } from "./utils";
 import "./App.css";
 
 const API_KEY = process.env.REACT_APP_API_ID;
 const API_URL = process.env.REACT_APP_API_URL;
+const buttons = ["Prague", "Tenerife", "Yakutsk", "London"];
 
 const fetchCurrentWeather = (setState, city) => {
   fetch(
@@ -20,10 +21,24 @@ const fetchCurrentWeather = (setState, city) => {
   });
 };
 
-const buttons = ["Prague", "Tenerife", "Yakutsk"];
+const fetchWeatherForecast = (setState, city) => {
+  fetch(
+    `${API_URL}data/2.5/forecast?q=${city}&units=metric&APPID=${API_KEY}`
+  ).then((response) => {
+    if (response.ok) {
+      response.json().then((data) => {
+        console.log(filterForecast(data.list));
+        setState(filterForecast(data.list));
+      });
+    } else {
+      console.log(response);
+    }
+  });
+};
 
 const App = () => {
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [city, setCity] = useState("Brno");
 
   const handleButtonClick = (value) => {
@@ -33,6 +48,7 @@ const App = () => {
 
   useEffect(() => {
     fetchCurrentWeather(setWeather, city);
+    fetchWeatherForecast(setForecast, city);
   }, [city]);
 
   return (
@@ -113,6 +129,15 @@ const App = () => {
               </div>
             </div>
           ) : null}
+          <div className="weather__forecast" id="predpoved">
+            <div className="forecast">
+              <div className="forecast__day">--</div>
+              <div className="forecast__icon">
+                {/* <img src={API_ICON_URL} style={{height: "100%"}} alt="current weather icon" /> */}
+              </div>
+              <div className="forecast__temp">-- °C</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
