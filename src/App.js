@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getTimefromUnix, filterForecast } from "./utils";
+import { getTimefromUnix, filterForecast, getDayfromUnix } from "./utils";
 import "./App.css";
 
 const API_KEY = process.env.REACT_APP_API_ID;
@@ -62,6 +62,7 @@ const App = () => {
               <button
                 className="button"
                 onClick={() => handleButtonClick(buttonValue)}
+                key={buttonValue}
               >
                 {buttonValue}
               </button>
@@ -130,13 +131,23 @@ const App = () => {
             </div>
           ) : null}
           <div className="weather__forecast" id="predpoved">
-            <div className="forecast">
-              <div className="forecast__day">--</div>
-              <div className="forecast__icon">
-                {/* <img src={API_ICON_URL} style={{height: "100%"}} alt="current weather icon" /> */}
+            {forecast !== null && forecast !== undefined ? (
+              <div className="forecast">
+                <div className="forecast__day">
+                  {getDayfromUnix(forecast[0].dt)}
+                </div>
+                <div className="forecast__icon">
+                  <img
+                    src={`http://openweathermap.org/img/wn/${forecast[0].weather[0].icon}@2x.png`}
+                    style={{ height: "100%" }}
+                    alt="current weather icon"
+                  />
+                </div>
+                <div className="forecast__temp">
+                  {Math.round(forecast[0].main.temp)} °C
+                </div>
               </div>
-              <div className="forecast__temp">-- °C</div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>
