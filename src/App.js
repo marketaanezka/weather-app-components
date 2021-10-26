@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { filterForecast } from "./utils";
+import { cities } from "./utils/cities";
 import Button from "./components/Button";
 import CurrentWeather from "./components/CurrentWeather";
 import DayForecast from "./components/DayForecast";
@@ -7,6 +8,7 @@ import "./App.css";
 
 const API_KEY = process.env.REACT_APP_API_ID;
 const API_URL = process.env.REACT_APP_API_URL;
+
 const buttons = ["Prague", "Tenerife", "Yakutsk"];
 
 const fetchCurrentWeather = (setState, city) => {
@@ -69,6 +71,22 @@ const App = () => {
               />
             );
           })}
+        </div>
+
+        <div className="select-wrapper">
+          <select
+            className="select"
+            name="cityselect"
+            id="cityselect"
+            value={city}
+            onChange={(e) => {
+              setCity(e.target.value);
+            }}
+          >
+            {cities.map((listedCity) => (
+              <option value={listedCity}>{listedCity}</option>
+            ))}
+          </select>
         </div>
 
         <div className="weather">
