@@ -72,7 +72,11 @@ const App = () => {
 
         <div className="weather">
           {weather !== null && weather !== undefined ? (
-            <div className="weather__current">
+            <div
+              className={`weather__current ${
+                weather.main.temp <= 10 ? "weather__current--cold" : ""
+              }`}
+            >
               <h2 className="weather__city" id="mesto">
                 {weather.name}, {weather.sys.country}
               </h2>
@@ -131,23 +135,25 @@ const App = () => {
             </div>
           ) : null}
           <div className="weather__forecast" id="predpoved">
-            {forecast !== null && forecast !== undefined ? (
-              <div className="forecast">
-                <div className="forecast__day">
-                  {getDayfromUnix(forecast[0].dt)}
-                </div>
-                <div className="forecast__icon">
-                  <img
-                    src={`http://openweathermap.org/img/wn/${forecast[0].weather[0].icon}@2x.png`}
-                    style={{ height: "100%" }}
-                    alt="current weather icon"
-                  />
-                </div>
-                <div className="forecast__temp">
-                  {Math.round(forecast[0].main.temp)} °C
-                </div>
-              </div>
-            ) : null}
+            {forecast !== null && forecast !== undefined
+              ? forecast.map((dayForecast) => (
+                  <div className="forecast">
+                    <div className="forecast__day">
+                      {getDayfromUnix(dayForecast.dt)}
+                    </div>
+                    <div className="forecast__icon">
+                      <img
+                        src={`http://openweathermap.org/img/wn/${dayForecast.weather[0].icon}@2x.png`}
+                        style={{ height: "100%" }}
+                        alt="current weather icon"
+                      />
+                    </div>
+                    <div className="forecast__temp">
+                      {Math.round(dayForecast.main.temp)} °C
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>
