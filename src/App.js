@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getTimefromUnix, filterForecast, getDayfromUnix } from "./utils";
+import { filterForecast } from "./utils";
+import Button from "./components/Button";
+import CurrentWeather from "./components/CurrentWeather";
+import DayForecast from "./components/DayForecast";
 import "./App.css";
 
 const API_KEY = process.env.REACT_APP_API_ID;
 const API_URL = process.env.REACT_APP_API_URL;
-const buttons = ["Prague", "Tenerife", "Yakutsk", "London"];
+const buttons = ["Prague", "Tenerife", "Yakutsk"];
 
 const fetchCurrentWeather = (setState, city) => {
   fetch(
@@ -39,7 +42,7 @@ const fetchWeatherForecast = (setState, city) => {
 const App = () => {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
-  const [city, setCity] = useState("Brno");
+  const [city, setCity] = useState("Prague");
 
   const handleButtonClick = (value) => {
     setCity(value);
@@ -59,99 +62,24 @@ const App = () => {
         <div className="button-group">
           {buttons.map((buttonValue) => {
             return (
-              <button
-                className="button"
-                onClick={() => handleButtonClick(buttonValue)}
+              <Button
                 key={buttonValue}
-              >
-                {buttonValue}
-              </button>
+                value={buttonValue}
+                handleClick={() => handleButtonClick(buttonValue)}
+              />
             );
           })}
         </div>
 
         <div className="weather">
           {weather !== null && weather !== undefined ? (
-            <div
-              className={`weather__current ${
-                weather.main.temp <= 10 ? "weather__current--cold" : ""
-              }`}
-            >
-              <h2 className="weather__city" id="mesto">
-                {weather.name}, {weather.sys.country}
-              </h2>
-              <div className="weather__inner weather__inner--center">
-                <div className="weather__section weather__section--temp">
-                  <span className="weather__temp-value" id="teplota">
-                    {Math.round(weather.main.temp)}
-                  </span>
-                  <span className="weather__temp-unit">°C</span>
-                  <div className="weather__description" id="popis">
-                    {weather.weather[0].main}
-                  </div>
-                </div>
-                <div
-                  className="weather__section weather__section--icon"
-                  id="ikona"
-                >
-                  <img
-                    src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                    alt="current weather icon"
-                  />
-                </div>
-              </div>
-              <div className="weather__inner">
-                <div className="weather__section">
-                  <h3 className="weather__title">Wind</h3>
-                  <div className="weather__value">
-                    <span id="wind">{weather.wind.speed}</span> km/h
-                  </div>
-                </div>
-                <div className="weather__section">
-                  <h3 className="weather__title">Humidity</h3>
-                  <div className="weather__value">
-                    <span id="humidity">{weather.main.humidity}</span> %
-                  </div>
-                </div>
-              </div>
-              <div className="weather__inner">
-                <div className="weather__section">
-                  <h3 className="weather__title">Sunrise</h3>
-                  <div className="weather__value">
-                    <span id="sunrise">
-                      {getTimefromUnix(weather.sys.sunrise)}
-                    </span>
-                  </div>
-                </div>
-                <div className="weather__section">
-                  <h3 className="weather__title">Sunset</h3>
-                  <div className="weather__value">
-                    <span id="sunset">
-                      {getTimefromUnix(weather.sys.sunset)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CurrentWeather weather={weather} />
           ) : null}
+
           <div className="weather__forecast" id="predpoved">
             {forecast !== null && forecast !== undefined
               ? forecast.map((dayForecast) => (
-                  <div className="forecast">
-                    <div className="forecast__day">
-                      {getDayfromUnix(dayForecast.dt)}
-                    </div>
-                    <div className="forecast__icon">
-                      <img
-                        src={`http://openweathermap.org/img/wn/${dayForecast.weather[0].icon}@2x.png`}
-                        style={{ height: "100%" }}
-                        alt="current weather icon"
-                      />
-                    </div>
-                    <div className="forecast__temp">
-                      {Math.round(dayForecast.main.temp)} °C
-                    </div>
-                  </div>
+                  <DayForecast key={dayForecast.dt} dayForecast={dayForecast} />
                 ))
               : null}
           </div>
