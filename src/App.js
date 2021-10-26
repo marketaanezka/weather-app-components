@@ -1,45 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { filterForecast } from "./utils";
-import { cities } from "./utils/cities";
+import { fetchCurrentWeather, fetchWeatherForecast } from "./api";
 import Button from "./components/Button";
+import Select from "./components/Select";
 import CurrentWeather from "./components/CurrentWeather";
 import DayForecast from "./components/DayForecast";
 import "./App.css";
 
-const API_KEY = process.env.REACT_APP_API_ID;
-const API_URL = process.env.REACT_APP_API_URL;
-
 const buttons = ["Prague", "Tenerife", "Yakutsk"];
-
-const fetchCurrentWeather = (setState, city) => {
-  fetch(
-    `${API_URL}data/2.5/weather?q=${city}&units=metric&APPID=${API_KEY}`
-  ).then((response) => {
-    if (response.ok) {
-      response.json().then((data) => {
-        console.log("fetched", data);
-        setState(data);
-      });
-    } else {
-      console.log(response);
-    }
-  });
-};
-
-const fetchWeatherForecast = (setState, city) => {
-  fetch(
-    `${API_URL}data/2.5/forecast?q=${city}&units=metric&APPID=${API_KEY}`
-  ).then((response) => {
-    if (response.ok) {
-      response.json().then((data) => {
-        console.log(filterForecast(data.list));
-        setState(filterForecast(data.list));
-      });
-    } else {
-      console.log(response);
-    }
-  });
-};
 
 const App = () => {
   const [weather, setWeather] = useState(null);
@@ -74,19 +41,7 @@ const App = () => {
         </div>
 
         <div className="select-wrapper">
-          <select
-            className="select"
-            name="cityselect"
-            id="cityselect"
-            value={city}
-            onChange={(e) => {
-              setCity(e.target.value);
-            }}
-          >
-            {cities.map((listedCity) => (
-              <option value={listedCity}>{listedCity}</option>
-            ))}
-          </select>
+          <Select value={city} handleChangeCity={setCity} />
         </div>
 
         <div className="weather">
