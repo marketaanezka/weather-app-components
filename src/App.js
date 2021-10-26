@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchCurrentWeather, fetchWeatherForecast } from "./api";
 import Button from "./components/Button";
-import Select from "./components/Select";
+import { cities } from "./utils/cities";
 import CurrentWeather from "./components/CurrentWeather";
 import DayForecast from "./components/DayForecast";
 import "./App.css";
@@ -41,7 +41,19 @@ const App = () => {
         </div>
 
         <div className="select-wrapper">
-          <Select value={city} handleChangeCity={setCity} />
+          <select
+            className="select"
+            name="cityselect"
+            id="cityselect"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          >
+            {cities.map((listedCity) => (
+              <option key={listedCity} value={listedCity}>
+                {listedCity}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="weather">

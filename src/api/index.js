@@ -9,7 +9,6 @@ export const fetchCurrentWeather = (setState, city) => {
   ).then((response) => {
     if (response.ok) {
       response.json().then((data) => {
-        console.log("fetched", data);
         setState(data);
       });
     } else {
@@ -24,7 +23,6 @@ export const fetchWeatherForecast = (setState, city) => {
   ).then((response) => {
     if (response.ok) {
       response.json().then((data) => {
-        console.log(filterForecast(data.list));
         setState(filterForecast(data.list));
       });
     } else {

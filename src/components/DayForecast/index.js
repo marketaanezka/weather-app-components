@@ -1,5 +1,6 @@
 import React from "react";
 import { getDayfromUnix } from "../../utils";
+import "./style.css";
 
 const DayForecast = ({ dayForecast }) => (
   <div className="forecast">

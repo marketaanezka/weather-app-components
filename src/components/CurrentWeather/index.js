@@ -1,5 +1,6 @@
 import React from "react";
 import { getTimefromUnix } from "../../utils";
+import "./style.css";
 
 const CurrentWeather = ({ weather }) => {
   return (
