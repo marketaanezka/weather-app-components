@@ -5,9 +5,9 @@ import "./App.css";
 const API_KEY = process.env.REACT_APP_API_ID;
 const API_URL = process.env.REACT_APP_API_URL;
 
-const fetchCurrentWeather = (setState) => {
+const fetchCurrentWeather = (setState, city) => {
   fetch(
-    `${API_URL}data/2.5/weather?q=Prague&units=metric&APPID=${API_KEY}`
+    `${API_URL}data/2.5/weather?q=${city}&units=metric&APPID=${API_KEY}`
   ).then((response) => {
     if (response.ok) {
       response.json().then((data) => {
@@ -20,17 +20,39 @@ const fetchCurrentWeather = (setState) => {
   });
 };
 
+const buttons = ["Prague", "Tenerife", "Yakutsk"];
+
 const App = () => {
   const [weather, setWeather] = useState(null);
+  const [city, setCity] = useState("Brno");
+
+  const handleButtonClick = (value) => {
+    setCity(value);
+    console.log(city);
+  };
 
   useEffect(() => {
-    fetchCurrentWeather(setWeather);
-  }, []);
+    fetchCurrentWeather(setWeather, city);
+  }, [city]);
 
   return (
     <div className="App">
       <div className="container">
         <h1>My Weather App</h1>
+
+        <div className="button-group">
+          {buttons.map((buttonValue) => {
+            return (
+              <button
+                className="button"
+                onClick={() => handleButtonClick(buttonValue)}
+              >
+                {buttonValue}
+              </button>
+            );
+          })}
+        </div>
+
         <div className="weather">
           {weather !== null && weather !== undefined ? (
             <div className="weather__current">
