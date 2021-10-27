@@ -1,6 +1,9 @@
 export const getTimefromUnix = (unix) => {
+  const hours = new Date(unix * 1000).getHours();
+  const minutes = new Date(unix * 1000).getMinutes();
+  const twoDigitMinutes = minutes.toString().padStart(2, "0");
   return `
-    ${new Date(unix * 1000).getHours()}:${new Date(unix * 1000).getMinutes()}
+    ${hours}:${twoDigitMinutes}
     `;
 };
 
