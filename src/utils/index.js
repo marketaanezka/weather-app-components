@@ -8,7 +8,7 @@ export const getTimefromUnix = (unix) => {
 };
 
 export const filterForecast = (array) => {
-  return array.filter((item, index) => index % 8 === 0);
+  return array.filter((_, index) => index % 8 === 0);
 };
 
 const days = [
